@@ -5,12 +5,11 @@ from pydantic import BaseModel
 
 from backend.repo_loader import fetch_repo_files
 from backend.embeddings import create_vector_store
+import backend.data.store as store
 
 
 router = APIRouter()
 
-vectorstore = None
-repo_files = None
 
 
 class RepoRequest(BaseModel):
@@ -27,11 +26,9 @@ def load_repo(data: RepoRequest):
         data.repo_name
     )
 
-    repo_files = files
+    store.repo_files = files
 
-    vectorstore = create_vector_store(
-        files
-    )
+    store.vectorstore = create_vector_store(files)
 
     return {
         "message": "Repository loaded successfully "

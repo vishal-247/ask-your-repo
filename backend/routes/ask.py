@@ -1,9 +1,9 @@
-
 from fastapi import APIRouter
 from pydantic import BaseModel
 
 from backend.rag_pipeline import ask_question
-from backend.routes.repos import vectorstore
+
+import backend.data.store as store
 
 
 router = APIRouter()
@@ -16,15 +16,17 @@ class QuestionRequest(BaseModel):
 @router.post("/ask")
 def ask(data: QuestionRequest):
 
-    if vectorstore is None:
+    if store.vectorstore is None:
 
         return {
-            "error": "Load repository first"
+            "answer": "Load repository first",
+            "sources": []
         }
 
     result = ask_question(
-        vectorstore,
+        store.vectorstore,
         data.question
     )
 
     return result
+

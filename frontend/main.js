@@ -1,4 +1,11 @@
+
 const API_BASE = "http://127.0.0.1:8000";
+
+
+// =========================
+// FETCH REPOSITORIES
+// =========================
+
 async function fetchRepos() {
 
     console.log("FETCHING REPOS");
@@ -21,7 +28,7 @@ async function fetchRepos() {
 
     repoList.innerHTML = "";
 
-    const repos = data.repositories;
+    const repos = data.repositories || [];
 
     repos.forEach(repo => {
 
@@ -48,7 +55,6 @@ async function fetchRepos() {
         repoList.appendChild(repoCard);
     });
 }
-
 
 
 
@@ -81,8 +87,9 @@ async function loadRepo(repoName) {
 }
 
 
+
 // =========================
-// ASK AI QUESTIONS
+// ASK QUESTION
 // =========================
 
 async function askQuestion() {
@@ -108,7 +115,7 @@ async function askQuestion() {
 
     const data = await response.json();
 
-    console.log(data);
+    console.log("ASK RESPONSE:", data);
 
     const responseBox = document.getElementById(
         "responseBox"
@@ -117,18 +124,22 @@ async function askQuestion() {
     responseBox.innerHTML = `
         <h2>🤖 AI Answer</h2>
 
-        <p>${data.answer}</p>
+        <p>
+            ${data.answer || data.response || "No answer returned"}
+        </p>
 
         <h2>📂 Source Files</h2>
 
         <ul>
-            ${data.sources.map(
-                source =>
-                `<li>${source}</li>`
-            ).join("")}
+            ${
+                (data.sources || []).map(
+                    source => `<li>${source}</li>`
+                ).join("")
+            }
         </ul>
     `;
 }
+
 
 
 // =========================
@@ -150,7 +161,9 @@ async function generateRoadmap() {
     ).innerHTML = `
         <h2>🧠 AI Learning Roadmap</h2>
 
-        <pre>${data.roadmap}</pre>
+        <pre>
+            ${data.roadmap || "No roadmap generated"}
+        </pre>
     `;
 }
 
