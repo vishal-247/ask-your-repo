@@ -13,19 +13,26 @@
 
     <div class="container">
 
+    
         <h1>🔥 Ask Your Repo</h1>
+
+        <h2>Enter GitHub Username</h2>
 
         <input
             type="text"
-            id="repoInput"
-            placeholder="username/repo"
+            id="usernameInput"
+            placeholder="GitHub username"
         >
 
-        <button onclick="loadRepo()">
-            Load Repository
+        <button onclick="fetchRepos()">
+            Fetch Repositories
         </button>
 
+        <div id="repoList"></div>
+
         <hr>
+
+
 
         <input
             type="text"
