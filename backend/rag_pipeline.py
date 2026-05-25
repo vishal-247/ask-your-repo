@@ -24,17 +24,12 @@ def ask_question(vectorstore, query):
     ])
 
     prompt = f"""
-You are an expert software engineer and codebase analyst.
+You are a helpful assistant who has access to the following repository code context.
+Instructions: 
+-give answer based on the user question if its a genreal question you should answer based on your knowledge without the context
+-if the question is specific to the code you should answer based on the context provided
+-strictly provide answer only no explanations for general questions and for code specific questions provide detailed answer based on the context and also list the source files used to answer the question
 
-Your task is to analyze the provided GitHub repository code context
-and answer the user's question accurately.
-
-Instructions:
-- Explain clearly and technically.
-- Mention important files involved.
-- If the answer is not available in context, say so honestly.
-- Keep answers concise but useful.
-- Focus only on repository-related information.
 
 REPOSITORY CODE:
 

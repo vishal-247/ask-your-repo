@@ -1,14 +1,14 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-from backend.repo_loader import fetch_repo_files
-from backend.embeddings import create_vector_store
-from backend.rag_pipeline import ask_question
 from fastapi.middleware.cors import CORSMiddleware
-from backend.roadmap_generator import generate_learning_roadmap
+
+import backend.routes.repos as repos
+import backend.routes.ask as ask
+import backend.routes.roadmap as roadmap
 
 
-app = FastAPI()
+app = FastAPI(
+    title="AskYourRepo API"
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,79 +18,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Store vector DB temporarily
-vectorstore = None
-repo_files = None
-
-
-class RepoRequest(BaseModel):
-    repo_name: str
-
-
-class QuestionRequest(BaseModel):
-    question: str
+app.include_router(repos.router)
+app.include_router(ask.router)
+app.include_router(roadmap.router)
 
 
 @app.get("/")
 def home():
 
     return {
-        "message": "Ask Your Repo Backend Running 😭🔥"
-    }
-
-
-@app.post("/load-repo")
-def load_repo(data: RepoRequest):
-
-    global vectorstore
-
-    global repo_files
-
-    files = fetch_repo_files(data.repo_name)
-
-    repo_files = files
-
-    vectorstore = create_vector_store(files)
-
-    return {
-        "message": "Repository loaded successfully 😭🔥",
-        "total_files": len(files)
-    }
-
-
-@app.post("/ask")
-def ask(data: QuestionRequest):
-
-    global vectorstore
-
-    if vectorstore is None:
-
-        return {
-            "error": "Load repository first"
-        }
-
-    result = ask_question(
-        vectorstore,
-        data.question
-    )
-
-    return result
-
-@app.get("/generate-roadmap")
-def roadmap():
-
-    global repo_files
-
-    if repo_files is None:
-
-        return {
-            "error": "Load repository first"
-        }
-
-    roadmap = generate_learning_roadmap(
-        repo_files
-    )
-
-    return {
-        "roadmap": roadmap
+        "message": "AskYourRepo API Running "
     }
