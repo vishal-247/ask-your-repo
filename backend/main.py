@@ -5,11 +5,14 @@ import backend.routes.repos as repos
 import backend.routes.ask as ask
 import backend.routes.roadmap as roadmap
 import backend.routes.architecture as architecture
+import backend.routes.dependencies as dependencies
 
 
 app = FastAPI(
     title="AskYourRepo API"
 )
+app.include_router(dependencies.router)
+
 
 app.add_middleware(
     CORSMiddleware,
