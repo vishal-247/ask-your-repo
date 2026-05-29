@@ -84,6 +84,10 @@ async function loadRepo(repoName) {
     console.log(data);
 
     alert(data.message);
+    loadArchitecture();
+    document.getElementById( "selectedRepoBox" ).innerHTML = 
+    ` <h2> ✅ Active Repository: </h2>
+     <p>${repoName}</p> `;
 }
 
 
@@ -148,22 +152,46 @@ async function askQuestion() {
 
 async function generateRoadmap() {
 
+     const response = await fetch( `${API_BASE}/generate-roadmap` );
+     
+     const data = await response.json(); console.log(data); 
+     
+     const roadmapBox = document.getElementById( "roadmapBox" );
+     
+     const roadmapLines = ( data.roadmap || "" ).split("\n"); 
+     
+     roadmapBox.innerHTML = ` <h2>🧠 AI Learning Roadmap</h2> `;
+     
+     roadmapLines.forEach(line => { if (line.trim() !== "")
+        
+        { roadmapBox.innerHTML += ` <div class="roadmap-step">
+            
+            ${line} </div> `; }
+        
+        }); 
+    
+    }
+
+    // =========================
+// architecture mapping
+// =========================
+
+async function loadArchitecture() {
+
     const response = await fetch(
-        `${API_BASE}/generate-roadmap`
+        `${API_BASE}/architecture-summary`
     );
 
     const data = await response.json();
 
-    console.log(data);
-
     document.getElementById(
-        "roadmapBox"
+        "architectureBox"
     ).innerHTML = `
-        <h2>🧠 AI Learning Roadmap</h2>
+        <h2>🏗️ Architecture Summary</h2>
 
-        <pre>
-            ${data.roadmap || "No roadmap generated"}
-        </pre>
+        <div class="architecture-card">
+            ${data.summary}
+        </div>
     `;
 }
 
