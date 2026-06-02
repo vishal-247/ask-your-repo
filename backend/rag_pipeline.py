@@ -10,7 +10,7 @@ api_key = os.getenv("NVIDIA_API_KEY")
 def ask_question(vectorstore, query):
 
     llm = ChatNVIDIA(
-        model="mistralai/mixtral-8x7b-instruct-v0.1",
+        model="meta/llama-3.1-70b-instruct",
         api_key=api_key,
         temperature=0
     )

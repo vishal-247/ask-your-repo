@@ -10,18 +10,15 @@ from backend.utils.architecture_builder import (
     build_architecture
 )
 
+from backend.utils.graph_builder import (
+    build_graph
+)
+
 router = APIRouter()
 
 
-@router.get("/architecture")
-def architecture():
-
-    if store.repo_files is None:
-
-        return {
-            "error":
-            "Load repository first"
-        }
+@router.get("/graph")
+def graph():
 
     dependency_data = analyze_dependencies(
         store.repo_files
@@ -31,4 +28,8 @@ def architecture():
         dependency_data
     )
 
-    return architecture_data
+    graph_data = build_graph(
+        architecture_data
+    )
+
+    return graph_data
