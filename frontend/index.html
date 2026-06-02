@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Ask Your Repo</title>
 
+    <!-- CSS File -->
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
     <div class="container">
 
-    
         <h1>🔥 Ask Your Repo</h1>
 
         <h2>Enter GitHub Username</h2>
@@ -21,7 +20,7 @@
         <input
             type="text"
             id="usernameInput"
-            placeholder="GitHub username"
+            placeholder="GitHub Username"
         >
 
         <button onclick="fetchRepos()">
@@ -29,12 +28,12 @@
         </button>
 
         <div id="repoList"></div>
+
         <div id="selectedRepoBox"></div>
-        <div id="architectureBox"></div>
 
         <hr>
 
-
+        <h2>Ask Questions</h2>
 
         <input
             type="text"
@@ -48,17 +47,26 @@
 
         <div id="responseBox"></div>
 
+        <hr>
+
         <button onclick="generateRoadmap()">
             Generate Learning Roadmap
         </button>
 
         <div id="roadmapBox"></div>
-        
+
+        <hr>
+
+        <button onclick="visualizeGraph()">
+            Visualize Architecture
+        </button>
+
+        <div id="architectureBox"></div>
 
     </div>
 
+    <!-- JavaScript File -->
     <script src="main.js"></script>
 
 </body>
-
 </html>

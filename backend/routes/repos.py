@@ -21,7 +21,7 @@ def load_repo(data: RepoRequest):
 
     global vectorstore
     global repo_files
-
+    print("REPO RECEIVED:", data.repo_name)
     files = fetch_repo_files(
         data.repo_name
     )
