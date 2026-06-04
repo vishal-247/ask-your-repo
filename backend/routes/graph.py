@@ -16,7 +16,6 @@ from backend.utils.graph_builder import (
 
 router = APIRouter()
 
-
 @router.get("/graph")
 def graph():
 
@@ -28,8 +27,6 @@ def graph():
         dependency_data
     )
 
-    graph_data = build_graph(
+    return build_graph(
         architecture_data
     )
-
-    return graph_data

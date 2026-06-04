@@ -1,3 +1,7 @@
+from backend.utils.layer_classifier import (
+    classify_component
+)
+
 def build_architecture(dependency_data):
 
     architecture = {
@@ -8,59 +12,64 @@ def build_architecture(dependency_data):
         "layers": [
 
             {
-                "name": "Frontend",
+                "name": "Presentation Layer",
                 "components": []
             },
 
             {
-                "name": "Backend",
+                "name": "API Layer",
+                "components": []
+            },
+
+            {
+                "name": "Data Layer",
                 "components": []
             },
 
             {
                 "name": "AI Layer",
                 "components": []
+            },
+            
+            {
+                "name": "Business Layer",
+                "components": []
             }
         ]
     }
+    for file in dependency_data["frontend_files"]:
+        architecture["layers"][0][
+        "components"
+        ].append(file)
 
     for imp in dependency_data["internal_imports"]:
+        layer = classify_component(imp)
 
-        imp_lower = imp.lower()
+        print("CLASSIFYING:", imp, "->", layer)
 
-        if any(
-            keyword in imp_lower
-            for keyword in [
-                "rag",
-                "embedding",
-                "llm",
-                "vector"
-            ]
-        ):
+        if layer == "Presentation Layer":
 
-            architecture["layers"][2][
-                "components"
-            ].append(imp)
+            architecture["layers"][0]["components"].append(imp)
 
-        elif any(
-            keyword in imp_lower
-            for keyword in [
-                "route",
-                "repo",
-                "service",
-                "backend",
-                "api"
-            ]
-        ):
+        elif layer == "API Layer":
 
-            architecture["layers"][1][
-                "components"
-            ].append(imp)
+            architecture["layers"][1]["components"].append(imp)
 
-        elif "frontend" in imp_lower:
+        elif layer == "Data Layer":
 
-            architecture["layers"][0][
-                "components"
-            ].append(imp)
+            architecture["layers"][2]["components"].append(imp)
 
-    return architecture
+        elif layer == "AI Layer":
+
+            architecture["layers"][3]["components"].append(imp)
+
+        elif layer == "Business Layer":
+
+            architecture["layers"][4]["components"].append(imp)
+
+            print("\nARCHITECTURE DATA:")
+            
+            print(architecture)
+            return architecture
+
+

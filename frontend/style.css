@@ -247,3 +247,34 @@ hr {
 
     margin-bottom: 15px;
 }
+
+.component-box {
+
+    background: #222;
+
+    margin-top: 10px;
+
+    margin-bottom: 20px;
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    border-left: 4px solid cyan;
+}
+
+.component-box p {
+
+    margin: 8px 0;
+}
+
+#graphContainer {
+
+    height: 600px;
+
+    background: #1e1e1e;
+
+    margin-top: 30px;
+
+    border-radius: 12px;
+}

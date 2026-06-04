@@ -19,11 +19,39 @@ def analyze_dependencies(files):
 
     external_imports = set()
 
+    frontend_files = []
+
+    repo_modules = set()
+
+    # Discover top-level modules present in repo
+
+    for file in files:
+
+        path = file["path"]
+
+        parts = path.split("/")
+
+        for part in parts[:-1]:
+            if part:
+                repo_modules.add(part)
+
     for file in files:
 
         path = file["path"]
 
         content = file["content"]
+        path_lower = path.lower()
+        if any(
+            path_lower.endswith(ext)
+            for ext in [
+                ".html",
+                ".css",
+                ".js",
+                ".jsx",
+                ".tsx"
+            ]
+        ):
+            frontend_files.append(path)
 
         filename = path.split("/")[-1]
 
@@ -43,13 +71,29 @@ def analyze_dependencies(files):
             imported = match[0] or match[1]
 
             imports.append(imported)
-
-            if "." in imported:
+            # Determine if the import is internal or external based on repo modules
+            if imported.startswith("."):
                 internal_imports.add(imported)
+                continue
+
+            root_module = imported.split(".")[0]
+
+            if root_module in repo_modules:
+
+                internal_imports.add(imported)
+
             else:
+
                 external_imports.add(imported)
 
         dependency_map[path] = imports
+
+    print("\n===== DEPENDENCY ANALYSIS =====")
+    print("REPO MODULES:", repo_modules)
+    print("INTERNAL IMPORTS:", internal_imports)
+    print("EXTERNAL IMPORTS:", external_imports)
+    print("===============================\n")
+    print("FRONTEND FILES:", frontend_files)
 
     return {
 
@@ -63,5 +107,11 @@ def analyze_dependencies(files):
             external_imports
         ),
 
-        "dependencies": dependency_map
+        "dependencies": dependency_map,
+
+        "repo_modules": list(
+            repo_modules
+        ),
+
+        "frontend_files": frontend_files
     }

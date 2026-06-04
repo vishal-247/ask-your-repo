@@ -1,23 +1,30 @@
 def build_graph(architecture_data):
 
-    layers = architecture_data["layers"]
-
     nodes = []
 
     edges = []
 
+    layers = architecture_data["layers"]
+
     for layer in layers:
 
-        nodes.append(layer["name"])
+        nodes.append({
+
+            "name": layer["name"],
+
+            "components": layer["components"]
+        })
 
     for i in range(len(nodes) - 1):
 
         edges.append([
-            nodes[i],
-            nodes[i + 1]
+            nodes[i]["name"],
+            nodes[i + 1]["name"]
         ])
 
     return {
+
         "nodes": nodes,
+
         "edges": edges
     }

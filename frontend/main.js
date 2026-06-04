@@ -382,44 +382,151 @@ async function visualizeArchitecture() {
     }
 }
 
+// ======================================
+// VISUALIZE GRAPH
+// ======================================
+
+// async function visualizeGraph() {
+
+//     const response = await fetch(
+//         `${API_BASE}/graph`
+//     );
+
+//     const data = await response.json();
+
+//     const architectureBox =
+//         document.getElementById(
+//             "architectureBox"
+//         );
+
+//     architectureBox.innerHTML =
+//         "<h2>🏗 Repository Flow</h2>";
+
+//     data.nodes.forEach(
+//         (node, index) => {
+
+//             architectureBox.innerHTML += `
+
+//                 <div
+//                     class="architecture-node"
+//                     onclick="toggleComponents('${node.name}')"
+//                 >
+
+//                     ${node.name}
+
+//                 </div>
+
+//                 <div
+//                     id="${node.name}"
+//                     class="component-box"
+//                     style="display:none;"
+//                 >
+
+//                     ${
+//                         node.components.map(
+//                             component =>
+//                                 `<p>${component}</p>`
+//                         ).join("")
+//                     }
+
+//                 </div>
+
+//             `;
+
+//             if (
+//                 index <
+//                 data.nodes.length - 1
+//             ) {
+
+//                 architectureBox.innerHTML +=
+//                     `<div class="arrow">⬇️</div>`;
+//             }
+//         }
+//     );
+// }
+// function toggleComponents(id) {
+
+//     const box =
+//         document.getElementById(id);
+
+//     if (
+//         box.style.display === "none"
+//     ) {
+
+//         box.style.display = "block";
+
+//     } else {
+
+//         box.style.display = "none";
+//     }
+// }
+
 async function visualizeGraph() {
 
-    const response = await fetch(
-        `${API_BASE}/graph`
-    );
-
-    const data = await response.json();
-
-    console.log(data);
-
-    const architectureBox =
-        document.getElementById(
-            "architectureBox"
+    const response =
+        await fetch(
+            `${API_BASE}/graph`
         );
 
-    architectureBox.innerHTML =
-        "<h2>🏗 Repository Flow</h2>";
+    const data =
+        await response.json();
 
-    data.nodes.forEach(
-        (node, index) => {
+    console.log(
+        "GRAPH DATA:",
+        data
+    );
+}
 
-            architectureBox.innerHTML += `
-                <div class="architecture-node">
-                    ${node}
-                </div>
-            `;
+async function visualizeGraphNetwork() {
 
-            if (
-                index <
-                data.nodes.length - 1
-            ) {
+    const response =
+        await fetch(
+            `${API_BASE}/architecture`
+        );
 
-                architectureBox.innerHTML += `
-                    <div class="arrow">
-                        ⬇️
-                    </div>
-                `;
+    const data =
+        await response.json();
+
+    const nodes = [];
+
+    const edges = [];
+
+    data.layers.forEach(
+        (layer, index) => {
+
+            nodes.push({
+
+                id: index,
+
+                label: layer.name
+            });
+
+            if (index > 0) {
+
+                edges.push({
+
+                    from: index - 1,
+
+                    to: index
+                });
             }
         }
+    );
+
+    const container =
+        document.getElementById(
+            "graphContainer"
+        );
+
+    new vis.Network(
+
+        container,
+
+        {
+            nodes,
+            edges
+        },
+
+        {}
     );
 }
