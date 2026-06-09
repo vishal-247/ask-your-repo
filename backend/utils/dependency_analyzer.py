@@ -18,9 +18,7 @@ def analyze_dependencies(files):
     internal_imports = set()
 
     external_imports = set()
-
-    frontend_files = []
-
+    
     repo_modules = set()
 
     # Discover top-level modules present in repo
@@ -40,18 +38,6 @@ def analyze_dependencies(files):
         path = file["path"]
 
         content = file["content"]
-        path_lower = path.lower()
-        if any(
-            path_lower.endswith(ext)
-            for ext in [
-                ".html",
-                ".css",
-                ".js",
-                ".jsx",
-                ".tsx"
-            ]
-        ):
-            frontend_files.append(path)
 
         filename = path.split("/")[-1]
 
@@ -93,7 +79,7 @@ def analyze_dependencies(files):
     print("INTERNAL IMPORTS:", internal_imports)
     print("EXTERNAL IMPORTS:", external_imports)
     print("===============================\n")
-    print("FRONTEND FILES:", frontend_files)
+    
 
     return {
 
@@ -113,5 +99,5 @@ def analyze_dependencies(files):
             repo_modules
         ),
 
-        "frontend_files": frontend_files
+        
     }

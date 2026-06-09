@@ -4,16 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import backend.routes.repos as repos
 import backend.routes.ask as ask
 import backend.routes.roadmap as roadmap
-import backend.routes.architecture as architecture
 import backend.routes.dependencies as dependencies
-import backend.routes.graph as graph
+
 
 
 app = FastAPI(
     title="AskYourRepo API"
 )
-app.include_router(graph.router)
-app.include_router(dependencies.router)
 
 
 app.add_middleware(
@@ -27,7 +24,7 @@ app.add_middleware(
 app.include_router(repos.router)
 app.include_router(ask.router)
 app.include_router(roadmap.router)
-app.include_router(architecture.router)
+app.include_router(dependencies.router)
 
 
 @app.get("/")

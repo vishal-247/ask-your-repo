@@ -181,100 +181,10 @@ hr {
 
 
 
-/* ==========================
-   ARCHITECTURE
-========================== */
-
-#architectureBox {
-
-    margin-top: 25px;
-
-    background: #1e1e1e;
-
-    padding: 20px;
-
-    border-radius: 12px;
-
-    border: 1px solid #444;
-}
 
 
-.architecture-layer {
-
-    background: #262626;
-
-    margin-top: 18px;
-
-    padding: 18px;
-
-    border-radius: 12px;
-
-    border: 1px solid #555;
-}
 
 
-.architecture-layer h3 {
-
-    margin-top: 0;
-
-    color: #67e8f9;
-}
 
 
-.architecture-node {
 
-    background: #333;
-
-    margin-top: 10px;
-
-    padding: 12px;
-
-    border-radius: 8px;
-
-    border-left: 4px solid cyan;
-
-    word-break: break-word;
-}
-
-
-.arrow {
-
-    text-align: center;
-
-    font-size: 30px;
-
-    margin-top: 15px;
-
-    margin-bottom: 15px;
-}
-
-.component-box {
-
-    background: #222;
-
-    margin-top: 10px;
-
-    margin-bottom: 20px;
-
-    padding: 15px;
-
-    border-radius: 10px;
-
-    border-left: 4px solid cyan;
-}
-
-.component-box p {
-
-    margin: 8px 0;
-}
-
-#graphContainer {
-
-    height: 600px;
-
-    background: #1e1e1e;
-
-    margin-top: 30px;
-
-    border-radius: 12px;
-}
