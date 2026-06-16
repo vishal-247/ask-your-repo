@@ -56,3 +56,16 @@ def get_user_repos(username: str):
         "repositories": repos
     }
 
+
+@router.get("/repo-files")
+def get_repo_files():
+    if store.repo_files is None:
+        return {"files": []}
+    return {
+        "files": [
+            {"path": f["path"], "content": f["content"]}
+            for f in store.repo_files
+        ]
+    }
+
+
