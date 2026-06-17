@@ -24,11 +24,11 @@ export default function Navbar() {
       </div>
 
       {/* Nav links */}
-      <div className="hidden md:flex items-center gap-8 text-[#7e7a9a] font-medium text-sm">
+      {/* <div className="hidden md:flex items-center gap-8 text-[#7e7a9a] font-medium text-sm">
         <a href="#features" className="hover:text-[#5b4fcf] transition-colors duration-200">Features</a>
         <a href="#docs" className="hover:text-[#5b4fcf] transition-colors duration-200">Docs</a>
         <a href="#changelog" className="hover:text-[#5b4fcf] transition-colors duration-200">Changelog</a>
-      </div>
+      </div> */}
 
       {/* Action button */}
       <div>
