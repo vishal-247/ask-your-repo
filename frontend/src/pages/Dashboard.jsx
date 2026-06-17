@@ -129,6 +129,11 @@ export default function Dashboard() {
     try {
       const resp = await chatService.getUserRepos(githubUsername);
       setUserRepos(resp.repositories || []);
+      if (resp.warning) {
+        setErrorMsg(resp.warning);
+      } else if (resp.error) {
+        setErrorMsg(resp.error);
+      }
     } catch (err) {
       setErrorMsg(`Failed to fetch repositories for ${githubUsername}: ${err.message}`);
     } finally {

@@ -6,7 +6,7 @@ import os
 
 from backend.services.file_role_classifier import FileRoleClassifier
 
-load_dotenv()
+load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env", override=True)
 
 token = os.getenv("GITHUB_TOKEN")
 g = Github(token)
