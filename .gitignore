@@ -2,3 +2,8 @@ venv/
 .env
 __pycache__/
 .faiss/
+
+node_modules
+
+
+secrets.txt

@@ -1,5 +1,8 @@
 import os
+import time
+
 from github import Github
+from github.GithubException import GithubException
 from fastapi import APIRouter
 from pydantic import BaseModel
 
@@ -9,6 +12,10 @@ import backend.data.store as store
 
 
 router = APIRouter()
+
+
+_USER_REPOS_CACHE = {}
+_USER_REPOS_CACHE_TTL_SECONDS = 300
 
 
 
@@ -38,21 +45,63 @@ def load_repo(data: RepoRequest):
 @router.get("/users/{username}/repos")
 def get_user_repos(username: str):
 
-    g = Github( os.getenv("GITHUB_TOKEN") )
+    cached = _USER_REPOS_CACHE.get(username)
+    now = time.time()
 
-    user = g.get_user(username)
+    if cached and now - cached["fetched_at"] < _USER_REPOS_CACHE_TTL_SECONDS:
+        return {"repositories": cached["repositories"], "cached": True}
 
-    repos = []
+    g = Github(os.getenv("GITHUB_TOKEN"))
 
-    for repo in user.get_repos():
+    try:
+        user = g.get_user(username)
 
-        repos.append({
-            "name": repo.name,
-            "full_name": repo.full_name,
-            "url": repo.html_url
-        })
+        repos = []
 
+        for repo in user.get_repos():
+
+            repos.append({
+                "name": repo.name,
+                "full_name": repo.full_name,
+                "url": repo.html_url
+            })
+
+        _USER_REPOS_CACHE[username] = {
+            "repositories": repos,
+            "fetched_at": now,
+        }
+
+        return {
+            "repositories": repos,
+            "cached": False,
+        }
+    except GithubException as exc:
+        if cached:
+            return {
+                "repositories": cached["repositories"],
+                "cached": True,
+                "warning": "GitHub rate limit reached; returning cached repositories.",
+            }
+
+        message = "Failed to fetch repositories from GitHub."
+        if exc.status == 403:
+            message = "GitHub rate limit exceeded. Try again later or configure a GitHub token."
+
+        return {
+            "repositories": [],
+            "error": message,
+        }
+
+
+@router.get("/repo-files")
+def get_repo_files():
+    if store.repo_files is None:
+        return {"files": []}
     return {
-        "repositories": repos
+        "files": [
+            {"path": f["path"], "content": f["content"]}
+            for f in store.repo_files
+        ]
     }
+
 

@@ -1,72 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Ask Your Repo</title>
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Landing page design</title>
+      <meta name="description" content="Interact with GitHub repositories through a chat interface that reveals directory structures and architectural insights, enhancing developer productivity." />
+      <meta name="robots" content="noindex, nofollow" />
+      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
+      
+    </head>
 
-    <!-- CSS File -->
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <div class="container">
-
-        <h1>🔥 Ask Your Repo</h1>
-
-        <h2>Enter GitHub Username</h2>
-
-        <input
-            type="text"
-            id="usernameInput"
-            placeholder="GitHub Username"
-        >
-
-        <button onclick="fetchRepos()">
-            Fetch Repositories
-        </button>
-
-        <div id="repoList"></div>
-
-        <div id="selectedRepoBox"></div>
-
-        <hr>
-
-        <h2>Ask Questions</h2>
-
-        <input
-            type="text"
-            id="questionInput"
-            placeholder="Ask about the repository"
-        >
-
-        <button onclick="askQuestion()">
-            Ask
-        </button>
-
-        <div id="responseBox"></div>
-
-        <hr>
-
-        <button onclick="generateRoadmap()">
-            Generate Learning Roadmap
-        </button>
-
-        <div id="roadmapBox"></div>
-
-        <hr>
-
-        <button onclick="visualizeGraph()">
-            Visualize Architecture
-        </button>
-
-        <div id="architectureBox"></div>
-
-    </div>
-
-    <!-- JavaScript File -->
-    <script src="main.js"></script>
-
-</body>
-</html>
+    <body>
+      
+      <div id="root"></div>
+      <script type="module" src="/src/main.jsx"></script>
+      
+    </body>
+  </html>
+  
