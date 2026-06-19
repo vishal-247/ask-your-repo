@@ -73,7 +73,7 @@ export default function Hero() {
         </button>
 
         <a
-          href="https://github.com"
+          href="https://github.com/shivani07-gh/ask-your-repo"
           target="_blank"
           rel="noopener noreferrer"
           className="border-2 border-[#5b4fcf]/10 hover:border-[#5b4fcf]/25 bg-[#f0edff]/30 hover:bg-[#f0edff]/60 text-[#5b4fcf] px-6 py-3.5 rounded-2xl font-bold flex items-center gap-2 active:scale-98 transition-all duration-200"

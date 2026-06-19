@@ -17,18 +17,14 @@ export default function Navbar() {
             <circle cx="6" cy="18" r="3" />
             <path d="M18 9a9 9 0 0 1-9 9" />
           </svg>
+
+
         </div>
         <span className="font-sans font-bold text-xl text-[#1c1a2e] tracking-tight group-hover:text-[#5b4fcf] transition-colors duration-300">
-          ask your repo
+          <pre>ASK YOUR REPO</pre>
         </span>
       </div>
 
-      {/* Nav links */}
-      {/* <div className="hidden md:flex items-center gap-8 text-[#7e7a9a] font-medium text-sm">
-        <a href="#features" className="hover:text-[#5b4fcf] transition-colors duration-200">Features</a>
-        <a href="#docs" className="hover:text-[#5b4fcf] transition-colors duration-200">Docs</a>
-        <a href="#changelog" className="hover:text-[#5b4fcf] transition-colors duration-200">Changelog</a>
-      </div> */}
 
       {/* Action button */}
       <div>
