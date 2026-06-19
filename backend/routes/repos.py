@@ -76,6 +76,7 @@ def get_user_repos(username: str):
             "cached": False,
         }
     except GithubException as exc:
+        print(f"[ERROR] GitHub API failed: Status {exc.status}, Details: {exc.data}")
         if cached:
             return {
                 "repositories": cached["repositories"],
@@ -84,7 +85,9 @@ def get_user_repos(username: str):
             }
 
         message = "Failed to fetch repositories from GitHub."
-        if exc.status == 403:
+        if exc.status == 401:
+            message = "Invalid GitHub Token. Please check your GITHUB_TOKEN in backend/.env"
+        elif exc.status == 403:
             message = "GitHub rate limit exceeded. Try again later or configure a GitHub token."
 
         return {
