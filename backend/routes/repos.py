@@ -1,10 +1,18 @@
 import os
 import time
+from pathlib import Path
+from dotenv import load_dotenv
 
 from github import Github
 from github.GithubException import GithubException
 from fastapi import APIRouter
 from pydantic import BaseModel
+
+# Load environment variables
+env_path = Path(__file__).resolve().parent.parent / ".env"
+if not env_path.exists():
+    env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+load_dotenv(dotenv_path=env_path, override=True)
 
 from backend.repo_loader import fetch_repo_files
 from backend.embeddings import create_vector_store
