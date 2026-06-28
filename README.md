@@ -168,7 +168,7 @@ Powered by vector embeddings for accurate context retrieval.
 
 ## Landing Page
 
-<img src="screenshots/landing.png"/>
+<img src="screenshots/landingpg_ayr.png"/>
 
 ---
 
