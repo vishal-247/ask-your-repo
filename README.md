@@ -1,45 +1,340 @@
-# how to run this project!!
+<div align="center">
 
-## step 0   
-- clone the repository to your local machine using the following command:
+# 🚀 Ask Your Repo
 
-```bash 
-git clone <repository-url>
+### AI-powered GitHub Repository Intelligence Platform
+
+Understand any GitHub repository through natural language conversations, semantic code search, architecture analysis, and AI-generated learning roadmaps.
+
+<p>
+<img src="https://img.shields.io/badge/Python-3.11-blue?logo=python">
+<img src="https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi">
+<img src="https://img.shields.io/badge/LangChain-RAG-success">
+<img src="https://img.shields.io/badge/FAISS-Vector_Search-orange">
+<img src="https://img.shields.io/badge/NVIDIA-AI-76B900?logo=nvidia">
+<img src="https://img.shields.io/badge/Version-v1.0-success">
+<img src="https://img.shields.io/badge/License-MIT-blue">
+</p>
+
+> Transform any GitHub repository into an interactive AI knowledge base.
+
+</div>
+
+---
+
+## 📖 Overview
+
+Understanding an unfamiliar codebase is often one of the biggest challenges for developers.
+
+**Ask Your Repo** is an AI-powered developer tool that transforms any public GitHub repository into an interactive knowledge base. It combines Retrieval-Augmented Generation (RAG), semantic code search, repository architecture analysis, and AI-generated onboarding roadmaps to help developers understand projects significantly faster.
+
+Instead of manually exploring hundreds of files, developers can simply ask questions in natural language and receive contextual answers backed by relevant source files.
+
+---
+
+# ✨ Features
+
+### 🤖 AI Codebase Chat
+
+Interact with any repository using natural language.
+
+- Context-aware AI responses
+- Retrieval-Augmented Generation (RAG)
+- Source file citations
+- Semantic code search
+- Repository-aware answers
+
+---
+
+### 📦 GitHub Repository Loader
+
+Load repositories directly from GitHub.
+
+- Public repository ingestion
+- GitHub username search
+- Repository selection
+- Automatic indexing pipeline
+
+---
+
+### 📁 Interactive File Explorer
+
+Navigate the repository through a clean explorer interface.
+
+- Folder hierarchy
+- File preview
+- Syntax-highlighted code viewer
+- Quick source inspection
+
+---
+
+### 🏗 Architecture Analyzer
+
+Automatically classifies repository files into logical software layers.
+
+Supported classifications include:
+
+- Backend
+- Frontend
+- AI
+- Database
+- Configuration
+
+---
+
+### 🧠 AI Learning Roadmap
+
+Generate an AI-powered onboarding roadmap for any repository.
+
+The roadmap recommends:
+
+- Where to start
+- Important project files
+- Learning sequence
+- Project entry points
+- Key implementation modules
+
+---
+
+### 🔍 Semantic Search
+
+Powered by vector embeddings for accurate context retrieval.
+
+- NVIDIA Embeddings
+- FAISS Vector Database
+- LangChain Retrieval Pipeline
+
+---
+
+# ⚙️ System Architecture
+
+```text
+                GitHub Repository
+                        │
+                        ▼
+              Repository Loader
+                        │
+                        ▼
+              Source Code Parser
+                        │
+                        ▼
+              Code Chunk Generator
+                        │
+                        ▼
+            NVIDIA Embedding Model
+                        │
+                        ▼
+                 FAISS Vector Store
+                        │
+                        ▼
+              Semantic Retrieval
+                        │
+                        ▼
+                NVIDIA LLM (RAG)
+                        │
+                        ▼
+        AI Response + Source References
 ```
-create a virtual environment and activate it by running the following commands in the terminal:
 
-```bash 
-python -m venv env
-source env/bin/activate  # On Windows, use `env\Scripts\activate`
-``` 
+---
 
-## step 1
+# 🛠 Tech Stack
 
--install all the dependencies by running the following command in the terminal:
+## Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+
+## Backend
+
+- Python
+- FastAPI
+
+## AI
+
+- LangChain
+- NVIDIA Embeddings
+- NVIDIA LLM
+- FAISS
+
+## APIs
+
+- GitHub REST API
+
+---
+
+# 📸 Screenshots
+
+## Landing Page
+
+<img src="screenshots/landing.png"/>
+
+---
+
+## Repository Loader
+
+<img src="screenshots/repo-loader.png"/>
+
+---
+
+## AI Codebase Chat
+
+<img src="screenshots/chat.png"/>
+
+---
+
+## File Explorer
+
+<img src="screenshots/file-explorer.png"/>
+
+---
+
+## Architecture Analyzer
+
+<img src="screenshots/architecture.png"/>
+
+---
+
+## AI Learning Roadmap
+
+<img src="screenshots/roadmap.png"/>
+
+---
+
+# 📁 Project Structure
+
+```text
+ask-your-repo/
+
+├── backend
+│   ├── routes
+│   ├── services
+│   ├── data
+│   ├── rag_pipeline.py
+│   ├── roadmap_generator.py
+│   ├── architecture_builder.py
+│   └── main.py
+│
+├── frontend
+│   ├── assets
+│   ├── css
+│   ├── js
+│   ├── pages
+│   └── index.html
+│
+└── README.md
+```
+
+---
+
+# 🚀 Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/yourusername/ask-your-repo.git
+
+cd ask-your-repo
+```
+
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## step 2
--create a .env file in the root directory of the project and add the following environment variables:
+## Run Backend
 
 ```bash
-GITHUB_TOKEN=your_github_token
-NVIDIA_API_KEY=your_nvidia_api_key
+uvicorn backend.main:app --reload
 ```
-## step 3
 
--run the following command to start the FastAPI server:
+## Launch Frontend
 
-```bash
-uvicorn backend.main:app --reload --port 8000
+Open
+
 ```
-## step 4   
-- start the forntend by running the following command in the terminal:
-
-```bash 
-cd frontend
-python -m http.server 5500
-# then open http://127.0.0.1:5500 in your web browser
+frontend/index.html
 ```
+
+or run using Live Server.
+
+---
+
+# 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|----------|-------------------------|--------------------------------|
+| POST | `/load-repo` | Clone & index GitHub repository |
+| GET | `/users/{username}/repos` | Fetch user repositories |
+| POST | `/ask` | Ask repository questions |
+| GET | `/generate-roadmap` | Generate learning roadmap |
+| GET | `/visualize` | Analyze repository architecture |
+
+---
+
+# 📊 Current Status
+
+| Module | Status |
+|----------|---------|
+| Repository Loader | ✅ |
+| GitHub Repository Search | ✅ |
+| Repository Ingestion | ✅ |
+| AI Codebase Chat | ✅ |
+| Semantic Retrieval | ✅ |
+| Source References | ✅ |
+| File Explorer | ✅ |
+| Architecture Analysis | ✅ |
+| AI Learning Roadmap | ✅ |
+| Authentication | 🚧 Planned |
+| Database Integration | 🚧 Planned |
+| Conversation History | 🚧 Planned |
+| Saved Repositories | 🚧 Planned |
+
+---
+
+# 🔮 Upcoming Features
+
+- User Authentication
+- Database Persistence
+- Conversation History
+- Saved Repositories
+- Interactive Dependency Graph
+- Repository Analytics
+- Repository Comparison
+- Pull Request Insights
+- Multi-user Workspaces
+- Exportable Learning Roadmaps
+
+---
+
+# 💡 Motivation
+
+Developers often spend hours understanding unfamiliar repositories before making their first contribution.
+
+Ask Your Repo accelerates this onboarding process by combining semantic search, retrieval-augmented generation, architecture analysis, and AI-powered learning guidance into a single developer experience.
+
+---
+
+# 🤝 Contributing
+
+Contributions, ideas, and feature requests are always welcome.
+
+Feel free to fork the repository, open issues, or submit pull requests.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+<div align="center">
+
+### ⭐ Star this repository if you found it useful!
+
+Built with ❤️ using FastAPI, LangChain, FAISS and NVIDIA AI.
+
+</div>
