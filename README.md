@@ -167,38 +167,42 @@ Powered by vector embeddings for accurate context retrieval.
 # 📸 Screenshots
 
 ## Landing Page
+<img width="1897" height="905" alt="landingpg_ayr" src="https://github.com/user-attachments/assets/286745ef-550d-420a-bfde-5f9dd2e5d8b8" />
 
-<img src="screenshots/landingpg_ayr.png"/>
 
 ---
 
 ## Repository Loader
 
-<img src="screenshots/repo-loader.png"/>
+<img width="1917" height="913" alt="repoloader_ayr" src="https://github.com/user-attachments/assets/687044c6-7e4e-4f44-bd0d-47ced416a576" />
+
 
 ---
 
 ## AI Codebase Chat
 
-<img src="screenshots/chat.png"/>
+<img width="1917" height="911" alt="chatbot_ayr" src="https://github.com/user-attachments/assets/58083bbf-ad3d-4309-b33f-44d66b99be8f" />
+
 
 ---
 
 ## File Explorer
 
-<img src="screenshots/file-explorer.png"/>
+<img width="1917" height="911" alt="fileexpl_ayr" src="https://github.com/user-attachments/assets/4ae555b6-5e00-471e-9cc5-0aded1ac9699" />
 
 ---
 
 ## Architecture Analyzer
 
-<img src="screenshots/architecture.png"/>
+
+<img width="1901" height="913" alt="architecture_ayr" src="https://github.com/user-attachments/assets/69f4d83a-d6cc-4d9b-8fc2-3978b7d1e786" />
+
 
 ---
 
 ## AI Learning Roadmap
 
-<img src="screenshots/roadmap.png"/>
+<img width="1917" height="912" alt="learningroad_ayr" src="https://github.com/user-attachments/assets/100254c2-1b15-4ff3-ace8-f3adeb6e0911" />
 
 ---
 
