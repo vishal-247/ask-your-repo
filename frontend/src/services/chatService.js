@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://ask-your-repo.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export const chatService = {
   async loadRepo(repoName) {
