@@ -480,7 +480,7 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
                 ref={inputRef}
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="e.g. torvalds, gaearon, sindresorhus…"
+                placeholder="e.g. vishal-247, shivani07-gh…"
                 autoFocus
                 style={{
                   fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "#1c1a2e",
@@ -546,11 +546,9 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
                   Search a GitHub user
                 </p>
                 <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#a09dc0", margin: 0 }}>
-                  Try <span style={{ color: "#5b4fcf", cursor: "pointer" }} onClick={() => { setQuery("torvalds"); fetchRepos("torvalds"); }}>torvalds</span>
+                  Try <span style={{ color: "#5b4fcf", cursor: "pointer" }} onClick={() => { setQuery("vishal-247"); fetchRepos("vishal-247"); }}>vishal-247</span>
                   {" · "}
-                  <span style={{ color: "#5b4fcf", cursor: "pointer" }} onClick={() => { setQuery("gaearon"); fetchRepos("gaearon"); }}>gaearon</span>
-                  {" · "}
-                  <span style={{ color: "#5b4fcf", cursor: "pointer" }} onClick={() => { setQuery("sindresorhus"); fetchRepos("sindresorhus"); }}>sindresorhus</span>
+                  <span style={{ color: "#5b4fcf", cursor: "pointer" }} onClick={() => { setQuery("shivani07-gh"); fetchRepos("shivani07-gh"); }}>shivani07-gh</span>
                 </p>
               </div>
             </motion.div>

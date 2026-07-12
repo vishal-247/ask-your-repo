@@ -80,7 +80,10 @@ class ArchitectureService:
             "unknown_files":
                 architecture[
                     "unknown_files"
-                ]
+                ],
+
+            "file_dependencies":
+                dependency_data
         }
 
     def _load_repo_files(

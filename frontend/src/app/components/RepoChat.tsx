@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  ArrowLeft, Send, Bot, User, GitFork, Star,
+  ArrowLeft, Send, Bot, User, GitFork, GitBranch, Star,
   FileText, FolderTree, Zap, RefreshCw, Copy, Check,
   ExternalLink, Code2, Loader2, ChevronRight,
 } from "lucide-react";
 import { backendApi } from "../lib/api";
+import { ArchitectureModal } from "./ArchitectureModal";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -295,6 +296,7 @@ export function RepoChat({ repo, onBack }: { repo: Repo; onBack: () => void }) {
   const [files, setFiles] = useState<GithubFile[]>([]);
   const [fileContent, setFileContent] = useState<Record<string, string>>({});
   const [loadingRepo, setLoadingRepo] = useState(true);
+  const [showArchitecture, setShowArchitecture] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -354,7 +356,7 @@ export function RepoChat({ repo, onBack }: { repo: Repo; onBack: () => void }) {
   const langColor = langColors[repo.language ?? ""] ?? "#a09dc0";
 
   return (
-    <div className="flex flex-col h-screen w-full" style={{ background: "#faf9ff", fontFamily: "'Inter', sans-serif" }}>
+    <div className="flex flex-col h-screen w-full" style={{ background: "#faf9ff", fontFamily: "'Inter', sans-serif", overflow: "hidden" }}>
       {/* BG */}
       <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
         <div style={{ position: "absolute", width: 450, height: 450, borderRadius: "50%", background: "radial-gradient(circle, rgba(167,139,250,0.09) 0%, transparent 70%)", top: -80, right: -60, filter: "blur(40px)" }} />
@@ -409,6 +411,14 @@ export function RepoChat({ repo, onBack }: { repo: Repo; onBack: () => void }) {
               <GitFork size={12} />
               {repo.forks_count.toLocaleString()}
             </span>
+            <button
+              onClick={() => setShowArchitecture(true)}
+              style={{ display: "flex", alignItems: "center", gap: 5, fontFamily: "'Inter', sans-serif", fontSize: "12.5px", fontWeight: 500, color: "white", background: "linear-gradient(135deg, #7c6ef5, #5b4fcf)", border: "none", borderRadius: 8, padding: "5px 12px", cursor: "pointer", boxShadow: "0 2px 8px rgba(91,79,207,0.2)", transition: "opacity 0.2s" }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = "0.85")}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = "1")}
+            >
+              <GitBranch size={12} /> Architecture
+            </button>
             <a
               href={repo.html_url}
               target="_blank"
@@ -424,7 +434,7 @@ export function RepoChat({ repo, onBack }: { repo: Repo; onBack: () => void }) {
 
         {/* Loading bar */}
         {loadingRepo && (
-          <div style={{ height: 2, background: "rgba(91,79,207,0.08)" }}>
+          <div style={{ height: 2, background: "rgba(91,79,207,0.08)", overflow: "hidden" }}>
             <motion.div
               animate={{ x: ["-100%", "200%"] }}
               transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
@@ -529,6 +539,12 @@ export function RepoChat({ repo, onBack }: { repo: Repo; onBack: () => void }) {
           </p>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showArchitecture && (
+          <ArchitectureModal repoName={repo.name} onClose={() => setShowArchitecture(false)} />
+        )}
+      </AnimatePresence>
 
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
