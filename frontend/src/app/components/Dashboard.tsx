@@ -46,6 +46,7 @@ interface GithubRepo {
   license: { name: string } | null;
   fork: boolean;
   size: number;
+  owner?: { login: string; avatar_url: string } | null;
 }
 
 // ─── Language colour map ──────────────────────────────────────────────────────
@@ -341,8 +342,12 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
     setFilter("");
     try {
       const data = await backendApi.searchRepositories<GithubUser, GithubRepo>(username.trim());
-      setUser(data.user);
-      setRepos(data.repos);
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setUser(data.user);
+        setRepos(data.repos);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to reach the backend.");
     } finally {

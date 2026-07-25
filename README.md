@@ -40,6 +40,6 @@ uvicorn backend.main:app --reload --port 8000
 
 ```bash 
 cd frontend
-python -m http.server 5500
+npm run dev
 # then open http://127.0.0.1:5500 in your web browser
 ```
