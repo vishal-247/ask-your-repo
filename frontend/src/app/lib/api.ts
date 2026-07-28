@@ -12,7 +12,11 @@ export interface BackendFile {
   size?: number;
 }
 
-interface LoadRepositoryResponse { files: BackendFile[]; }
+interface LoadRepositoryResponse {
+  files: BackendFile[];
+  error?: string;
+  message?: string;
+}
 interface ChatResponse { answer: string; }
 
 export interface ArchitectureNode {
@@ -65,7 +69,21 @@ async function post<T>(endpoint: string, body: unknown): Promise<T> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!response.ok) throw new Error((await response.text().catch(() => "")) || `Backend request failed (${response.status}).`);
+  if (!response.ok) {
+    let errMsg = `Backend request failed (${response.status}).`;
+    try {
+      const data = await response.json();
+      if (data && typeof data === "object") {
+        if ("detail" in data) errMsg = String(data.detail);
+        else if ("error" in data) errMsg = String(data.error);
+        else if ("message" in data) errMsg = String(data.message);
+      }
+    } catch {
+      const text = await response.text().catch(() => "");
+      if (text) errMsg = text;
+    }
+    throw new Error(errMsg);
+  }
   return response.json() as Promise<T>;
 }
 
@@ -74,14 +92,28 @@ async function get<T>(endpoint: string): Promise<T> {
   const response = await fetch(endpoint, {
     method: "GET",
   });
-  if (!response.ok) throw new Error((await response.text().catch(() => "")) || `Backend request failed (${response.status}).`);
+  if (!response.ok) {
+    let errMsg = `Backend request failed (${response.status}).`;
+    try {
+      const data = await response.json();
+      if (data && typeof data === "object") {
+        if ("detail" in data) errMsg = String(data.detail);
+        else if ("error" in data) errMsg = String(data.error);
+        else if ("message" in data) errMsg = String(data.message);
+      }
+    } catch {
+      const text = await response.text().catch(() => "");
+      if (text) errMsg = text;
+    }
+    throw new Error(errMsg);
+  }
   return response.json() as Promise<T>;
 }
 
 export const backendApi = {
   // POST { username } -> { user, repos }
   searchRepositories: <User, Repository>(username: string) =>
-    post<{ user: User; repos: Repository[] }>(BACKEND_ENDPOINTS.searchRepositories, { username }),
+    post<{ user: User | null; repos: Repository[]; error?: string }>(BACKEND_ENDPOINTS.searchRepositories, { username }),
   // POST { fullName } -> { files }
   loadRepository: (fullName: string) => post<LoadRepositoryResponse>(BACKEND_ENDPOINTS.loadRepository, { fullName }),
   // POST { fullName, message } -> { answer }

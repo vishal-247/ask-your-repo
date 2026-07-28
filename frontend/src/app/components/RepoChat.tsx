@@ -20,7 +20,7 @@ interface Repo {
   language: string | null;
   default_branch?: string;
   topics?: string[];
-  owner: { login: string; avatar_url: string };
+  owner?: { login: string; avatar_url: string } | null;
 }
 
 interface GithubFile {
@@ -47,6 +47,9 @@ const langColors: Record<string, string> = {
 
 async function fetchRepoTree(fullName: string): Promise<GithubFile[]> {
   const data = await backendApi.loadRepository(fullName);
+  if (data.error) {
+    throw new Error(data.error);
+  }
   return data.files;
 }
 
@@ -139,7 +142,8 @@ function generateAnswer(question: string, repo: Repo, files: GithubFile[], fileC
 
   // Contributors / author
   if (q.includes("author") || q.includes("contribut") || q.includes("owner") || q.includes("who")) {
-    return `**${repo.name}** is owned by **${repo.owner.login}** on GitHub.\n\nThe repo has earned **${repo.stargazers_count.toLocaleString()} stars** and been forked **${repo.forks_count.toLocaleString()} times**, suggesting a healthy contributor base.\n\nView all contributors → ${repo.html_url}/graphs/contributors`;
+    const ownerName = repo.owner?.login ?? repo.full_name.split("/")[0] ?? "unknown";
+    return `**${repo.name}** is owned by **${ownerName}** on GitHub.\n\nThe repo has earned **${repo.stargazers_count.toLocaleString()} stars** and been forked **${repo.forks_count.toLocaleString()} times**, suggesting a healthy contributor base.\n\nView all contributors → ${repo.html_url}/graphs/contributors`;
   }
 
   // Stats
@@ -382,7 +386,7 @@ export function RepoChat({ repo, onBack }: { repo: Repo; onBack: () => void }) {
           <div style={{ width: 1, height: 20, background: "rgba(91,79,207,0.12)" }} />
 
           {/* Repo identity */}
-          <img src={repo.owner.avatar_url} alt={repo.owner.login} style={{ width: 32, height: 32, borderRadius: "50%", border: "2px solid white", boxShadow: "0 2px 8px rgba(91,79,207,0.18)" }} />
+          <img src={repo.owner?.avatar_url ?? `https://github.com/${repo.full_name.split("/")[0]}.png`} alt={repo.owner?.login ?? repo.full_name.split("/")[0]} style={{ width: 32, height: 32, borderRadius: "50%", border: "2px solid white", boxShadow: "0 2px 8px rgba(91,79,207,0.18)" }} />
           <div className="flex flex-col" style={{ minWidth: 0 }}>
             <div className="flex items-center gap-2">
               <span style={{ fontFamily: "'Geist', sans-serif", fontSize: "15px", fontWeight: 600, color: "#1c1a2e", letterSpacing: "-0.02em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
