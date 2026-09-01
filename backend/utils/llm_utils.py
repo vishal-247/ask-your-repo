@@ -7,7 +7,6 @@ load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env", overrid
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
 
 DEFAULT_OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
 
@@ -17,17 +16,9 @@ OPENROUTER_FALLBACK_MODELS = [
     "openrouter/free",
 ]
 
-NVIDIA_CHAT_MODELS = [
-    "deepseek-ai/deepseek-v4-flash-0731",
-    "nvidia/llama-3.1-nemotron-70b-instruct",
-    "mistralai/mistral-large-2-instruct",
-    "google/gemma-3-12b-it",
-    "meta/llama-3.3-70b-instruct",
-]
-
 
 def get_chat_llm(temperature: float = 0, model_name: str = None):
-    """Returns an active LLM instance supporting OpenRouter (primary), Groq, Google Gemini, or NVIDIA."""
+    """Returns an active LLM instance supporting OpenRouter (primary), Groq, or Google Gemini."""
     
     # 1. OpenRouter API (Primary - Unified access with server-side free model fallbacks)
     if OPENROUTER_API_KEY:
@@ -79,25 +70,7 @@ def get_chat_llm(temperature: float = 0, model_name: str = None):
         except Exception as e:
             print(f"Gemini LLM init failed: {e}")
 
-    # 4. Check for NVIDIA API
-    if NVIDIA_API_KEY:
-        from langchain_nvidia_ai_endpoints import ChatNVIDIA
-        for m in NVIDIA_CHAT_MODELS:
-            try:
-                return ChatNVIDIA(
-                    model=m,
-                    api_key=NVIDIA_API_KEY,
-                    temperature=temperature
-                )
-            except Exception:
-                continue
+    raise ValueError("No valid LLM API keys found (OPENROUTER_API_KEY, GROQ_API_KEY, or GEMINI_API_KEY).")
 
-        return ChatNVIDIA(
-            model=NVIDIA_CHAT_MODELS[0],
-            api_key=NVIDIA_API_KEY,
-            temperature=temperature
-        )
-
-    raise ValueError("No valid LLM API keys found (OPENROUTER_API_KEY, GROQ_API_KEY, GEMINI_API_KEY, or NVIDIA_API_KEY).")
 
 
