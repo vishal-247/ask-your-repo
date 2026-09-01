@@ -3,12 +3,14 @@ import time
 
 from github import Github
 from github.GithubException import GithubException
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 
 from backend.repo_loader import fetch_repo_files
 from backend.embeddings import create_vector_store
 import backend.data.store as store
+from backend.utils.auth_deps import require_current_user
+from backend.models.user import User
 
 
 router = APIRouter()
@@ -104,7 +106,7 @@ def _build_tree_files(files):
 
 
 @router.post("/search-repos")
-def search_repos(data: SearchReposRequest):
+def search_repos(data: SearchReposRequest, current_user: User = Depends(require_current_user)):
     token = os.getenv("GITHUB_TOKEN")
     g = Github(token, retry=None) if token else Github(retry=None)
 
@@ -142,7 +144,7 @@ def search_repos(data: SearchReposRequest):
 
 
 @router.post("/load-repo")
-def load_repo(data: RepoRequest):
+def load_repo(data: RepoRequest, current_user: User = Depends(require_current_user)):
     repo_name = data.repo_name or data.fullName
 
     if not repo_name:
@@ -187,7 +189,7 @@ def load_repo(data: RepoRequest):
 
 
 @router.get("/users/{username}/repos")
-def get_user_repos(username: str):
+def get_user_repos(username: str, current_user: User = Depends(require_current_user)):
 
     cached = _USER_REPOS_CACHE.get(username)
     now = time.time()
@@ -238,7 +240,7 @@ def get_user_repos(username: str):
 
 
 @router.get("/repo-files")
-def get_repo_files():
+def get_repo_files(current_user: User = Depends(require_current_user)):
     if store.repo_files is None:
         return {"files": []}
     return {

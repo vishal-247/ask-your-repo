@@ -1,9 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from backend.rag_pipeline import ask_question
-
 import backend.data.store as store
+from backend.utils.auth_deps import require_current_user
+from backend.models.user import User
 
 
 router = APIRouter()
@@ -16,7 +17,7 @@ class QuestionRequest(BaseModel):
 
 
 @router.post("/ask")
-def ask(data: QuestionRequest):
+def ask(data: QuestionRequest, current_user: User = Depends(require_current_user)):
     question = data.question or data.message
     if not question:
         return {
