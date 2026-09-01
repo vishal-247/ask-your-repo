@@ -10,6 +10,7 @@ import backend.routes.repos as repos
 import backend.routes.ask as ask
 import backend.routes.roadmap as roadmap
 import backend.routes.auth_routes as auth_routes
+import backend.routes.dependencies as dependencies_routes
 
 # Initialize DB tables
 Base.metadata.create_all(bind=engine)
@@ -32,6 +33,7 @@ app.include_router(repos.router)
 app.include_router(ask.router)
 app.include_router(roadmap.router)
 app.include_router(architecture_router)
+app.include_router(dependencies_routes.router)
 
 
 @app.get("/")
