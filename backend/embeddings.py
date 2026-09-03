@@ -1,21 +1,42 @@
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_core.documents import Document
-
-from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
-
-from langchain_community.vectorstores import FAISS
-
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
+from langchain_community.vectorstores import FAISS
 
-# Try loading from backend/ directory or root directory
-env_path = Path(__file__).resolve().parent / ".env"
-if not env_path.exists():
-    env_path = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(dotenv_path=env_path, override=True)
+load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env", override=True)
 
-api_key = os.getenv("NVIDIA_API_KEY")
+# Global singleton instance for fast API embeddings
+_embeddings_instance = None
+
+
+def get_embeddings_model():
+    """Returns lightweight API-based embeddings instance (0 PyTorch/GPU RAM overhead)."""
+    global _embeddings_instance
+    if _embeddings_instance is None:
+        openrouter_key = os.getenv("OPENROUTER_API_KEY")
+        gemini_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+
+        if openrouter_key:
+            from langchain_openai import OpenAIEmbeddings
+            print("Using OpenRouter Embeddings (openai/text-embedding-3-small)...")
+            _embeddings_instance = OpenAIEmbeddings(
+                model="openai/text-embedding-3-small",
+                openai_api_key=openrouter_key,
+                openai_api_base="https://openrouter.ai/api/v1"
+            )
+        elif gemini_key:
+            from langchain_google_genai import GoogleGenerativeAIEmbeddings
+            print("Using Google Gemini Embeddings (models/embedding-001)...")
+            _embeddings_instance = GoogleGenerativeAIEmbeddings(
+                model="models/embedding-001",
+                google_api_key=gemini_key
+            )
+        else:
+            raise ValueError("No valid API key found for embeddings (OPENROUTER_API_KEY or GEMINI_API_KEY).")
+
+    return _embeddings_instance
 
 
 def create_vector_store(files):
@@ -43,16 +64,15 @@ def create_vector_store(files):
 
     print("TOTAL CHUNKS:", len(split_docs))
 
-    # NVIDIA Embeddings
-    embeddings = NVIDIAEmbeddings(
-        model="nvidia/nv-embedcode-7b-v1",
-        api_key=api_key
-    )
+    # Fast API-based Embeddings Model (0 RAM / PyTorch overhead)
+    embeddings = get_embeddings_model()
 
     # FAISS Vector DB
     vectorstore = FAISS.from_documents(
         split_docs,
         embeddings
     )
+
+    print("FAISS VECTOR STORE CREATED SUCCESSFULLY VIA API EMBEDDINGS!")
 
     return vectorstore

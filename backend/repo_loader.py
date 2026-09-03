@@ -1,31 +1,34 @@
-# fetch_repo_files.py
 from github import Github
+from github.GithubException import GithubException
 from dotenv import load_dotenv
 from pathlib import Path
 import os
 
 from backend.services.file_role_classifier import FileRoleClassifier
 
-# Try loading from backend/ directory or root directory
-env_path = Path(__file__).resolve().parent / ".env"
-if not env_path.exists():
-    env_path = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(dotenv_path=env_path, override=True)
-
-token = os.getenv("GITHUB_TOKEN")
-g = Github(token)
+load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env", override=True)
 
 _classifier = FileRoleClassifier()
 SUPPORTED_EXTENSIONS = _classifier.SUPPORTED_EXTENSIONS
 
 
 def fetch_repo_files(repo_name):
+    token = os.getenv("GITHUB_TOKEN")
+    g_client = Github(token, retry=None) if token else Github(retry=None)
+    
+    try:
+        repo = g_client.get_repo(repo_name)
+    except GithubException as exc:
+        if token and exc.status == 401:
+            print("WARNING: GITHUB_TOKEN is invalid. Falling back to unauthenticated client.")
+            g_client = Github(retry=None)
+            repo = g_client.get_repo(repo_name)
+        else:
+            raise exc
 
-    repo = g.get_repo(repo_name)
     all_files = []
 
     def read_contents(path=""):
-
         contents = repo.get_contents(path)
 
         for content in contents:
