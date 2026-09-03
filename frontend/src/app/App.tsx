@@ -3,6 +3,9 @@ import { motion } from "motion/react";
 import { MatteCard } from "./components/MatteCard";
 import { FloatingOctocats } from "./components/FloatingOctocats";
 import { Dashboard } from "./components/Dashboard";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { UserMenu } from "./components/UserMenu";
+import { AuthModal } from "./components/AuthModal";
 
 const features = [
   {
@@ -69,10 +72,22 @@ const steps = [
   },
 ];
 
-export default function App() {
+function AppContent() {
+  const { isAuthenticated, openAuthModal } = useAuth();
   const [page, setPage] = useState<"landing" | "dashboard">("landing");
 
+  const handleOpenDashboard = () => {
+    if (!isAuthenticated) {
+      openAuthModal("login");
+    } else {
+      setPage("dashboard");
+    }
+  };
+
   if (page === "dashboard") {
+    if (!isAuthenticated) {
+      return <Dashboard onBack={() => setPage("landing")} />;
+    }
     return <Dashboard onBack={() => setPage("landing")} />;
   }
 
@@ -138,25 +153,7 @@ export default function App() {
           </div>
 
          
-          <button
-            style={{
-              fontFamily: "'Geist', sans-serif", fontSize: "13.5px", fontWeight: 500,
-              color: "white", background: "linear-gradient(135deg, #7c6ef5, #5b4fcf)",
-              border: "none", borderRadius: "10px", padding: "8px 18px", cursor: "pointer",
-              letterSpacing: "-0.01em", boxShadow: "0 2px 12px rgba(91,79,207,0.28)",
-              transition: "transform 0.2s, box-shadow 0.2s",
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 18px rgba(91,79,207,0.38)";
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(91,79,207,0.28)";
-            }}
-          >
-            Sign in
-          </button>
+          <UserMenu />
         </motion.nav>
 
         {/* Hero */}
@@ -244,7 +241,7 @@ export default function App() {
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.15 }}
-                onClick={() => setPage("dashboard")}
+                onClick={handleOpenDashboard}
                 style={{
                   fontFamily: "'Geist', sans-serif", fontSize: "15px", fontWeight: 500,
                   color: "white", background: "linear-gradient(135deg, #7c6ef5, #5b4fcf)",
@@ -368,7 +365,7 @@ export default function App() {
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.15 }}
-              onClick={() => setPage("dashboard")}
+              onClick={handleOpenDashboard}
               style={{
                 fontFamily: "'Geist', sans-serif", fontSize: "15px", fontWeight: 600,
                 color: "#5b4fcf", background: "white",
@@ -424,5 +421,14 @@ export default function App() {
         </footer>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+      <AuthModal />
+    </AuthProvider>
   );
 }

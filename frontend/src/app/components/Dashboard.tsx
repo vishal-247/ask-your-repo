@@ -6,6 +6,8 @@ import {
   BookOpen, MapPin, Link2, Twitter,
 } from "lucide-react";
 import { RepoChat } from "./RepoChat";
+import { UserMenu } from "./UserMenu";
+import { useAuth } from "../context/AuthContext";
 import { backendApi } from "../lib/api";
 import {
   NavigationMenu,
@@ -323,6 +325,7 @@ function SortBar({ sort, setSort, filter, setFilter, total }: {
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 
 export function Dashboard({ onBack }: { onBack: () => void }) {
+  const { isAuthenticated, openAuthModal } = useAuth();
   const [query, setQuery]       = useState("");
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState<string | null>(null);
@@ -335,6 +338,11 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
 
   const fetchRepos = useCallback(async (username: string) => {
     if (!username.trim()) return;
+    if (!isAuthenticated) {
+      openAuthModal("login");
+      setError("Please sign in to search and explore repositories.");
+      return;
+    }
     setLoading(true);
     setError(null);
     setUser(null);
@@ -353,10 +361,15 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated, openAuthModal]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      openAuthModal("login");
+      setError("Please sign in to search and explore repositories.");
+      return;
+    }
     fetchRepos(query);
   };
 
@@ -370,6 +383,11 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
     });
 
   const handleExplore = (repo: GithubRepo) => {
+    if (!isAuthenticated) {
+      openAuthModal("login");
+      setError("Please sign in to explore repositories.");
+      return;
+    }
     setChatRepo(repo);
   };
 
@@ -432,7 +450,7 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
             </NavigationMenuList>
           </NavigationMenu> */}
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <div
               className="flex items-center gap-1.5 rounded-full px-3 py-1"
               style={{ background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.25)" }}
@@ -440,6 +458,7 @@ export function Dashboard({ onBack }: { onBack: () => void }) {
               <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#34d399" }} />
               <span style={{ fontFamily: "'Geist Mono', monospace", fontSize: "10px", color: "#059669", letterSpacing: "0.06em" }}>LIVE API</span>
             </div>
+            <UserMenu />
           </div>
         </nav>
 

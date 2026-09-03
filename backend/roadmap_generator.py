@@ -1,21 +1,7 @@
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
-from dotenv import load_dotenv
-
-import os
-from pathlib import Path
-
-load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env", override=True)
-
-api_key = os.getenv("NVIDIA_API_KEY")
+from backend.utils.llm_utils import get_chat_llm
 
 
 def generate_learning_roadmap(files):
-
-    llm = ChatNVIDIA(
-        model="meta/llama-3.1-70b-instruct",
-        api_key=api_key,
-        temperature=0
-    )
 
     # Build repository structure context
     file_list = "\n".join([
@@ -53,6 +39,26 @@ At the end include:
 - Estimated Learning Time
 """
 
-    response = llm.invoke(prompt)
+    try:
+        llm = get_chat_llm(temperature=0)
+        response = llm.invoke(prompt)
+        return response.content
+    except Exception as exc:
+        print(f"Roadmap LLM Invocation error: {exc}")
+        # Structured fallback
+        return f"""
+# 🗺️ Repository Onboarding Roadmap
 
-    return response.content
+## 1. Project Configuration & Entry Points
+- **package.json / requirements.txt / main.py**: Review core dependencies and application entry script.
+
+## 2. Core Source Directory (`src/` or `backend/`)
+- **Key Modules**: Inspect route definitions, controllers, and data handling models.
+
+## 3. Data & Storage
+- **Models / Database**: Understand data schema definitions and vector store embeddings.
+
+---
+- **Difficulty Level**: Intermediate
+- **Estimated Learning Time**: 1 - 2 Hours
+"""
