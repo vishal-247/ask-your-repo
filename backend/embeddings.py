@@ -12,12 +12,11 @@ _embeddings_instance = None
 
 
 def get_embeddings_model():
-    """Returns lightweight API-based embeddings instance (0 PyTorch/GPU RAM overhead)."""
+    """Returns lightweight API-based embeddings instance."""
     global _embeddings_instance
     if _embeddings_instance is None:
         openrouter_key = os.getenv("OPENROUTER_API_KEY")
-        gemini_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-
+        
         if openrouter_key:
             from langchain_openai import OpenAIEmbeddings
             print("Using OpenRouter Embeddings (openai/text-embedding-3-small)...")
@@ -26,15 +25,8 @@ def get_embeddings_model():
                 openai_api_key=openrouter_key,
                 openai_api_base="https://openrouter.ai/api/v1"
             )
-        elif gemini_key:
-            from langchain_google_genai import GoogleGenerativeAIEmbeddings
-            print("Using Google Gemini Embeddings (models/embedding-001)...")
-            _embeddings_instance = GoogleGenerativeAIEmbeddings(
-                model="models/embedding-001",
-                google_api_key=gemini_key
-            )
         else:
-            raise ValueError("No valid API key found for embeddings (OPENROUTER_API_KEY or GEMINI_API_KEY).")
+            raise ValueError("No valid API key found for embeddings (OPENROUTER_API_KEY ).")
 
     return _embeddings_instance
 
